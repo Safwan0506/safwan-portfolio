@@ -1,69 +1,84 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import Navbar from "@/components/ui/Navbar";
+import Orion from "@/components/chatbot/Orion";
+import ShootingStars from "@/components/ui/ShootingStars";
+import AccueilPage from "@/components/pages/AccueilPage";
+import ParcoursPage from "@/components/pages/ParcoursPage";
+import CompetencesPage from "@/components/pages/CompetencesPage";
+import ProjetsPage from "@/components/pages/ProjetsPage";
+import ContactPage from "@/components/pages/ContactPage";
+
+const NeuralHub = dynamic(() => import("@/components/3d/NeuralHub"), {
+  ssr: false,
+  loading: () => (
+    <div className="fixed inset-0 bg-[var(--background)] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+});
+
+export type PageId = "hub" | "accueil" | "parcours" | "competences" | "projets" | "contact";
+
+const pageTransition = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+  transition: { duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+};
+
+const hubTransition = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 1.05 },
+  transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+};
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState<PageId>("hub");
+
+  const navigate = useCallback((page: PageId) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen onComplete={() => setLoading(false)} />;
+  }
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case "accueil": return <AccueilPage />;
+      case "parcours": return <ParcoursPage />;
+      case "competences": return <CompetencesPage />;
+      case "projets": return <ProjetsPage />;
+      case "contact": return <ContactPage />;
+      default: return null;
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="relative min-h-screen bg-[var(--background)]">
+      <ShootingStars />
+      <Navbar currentPage={currentPage} onNavigate={navigate} />
+      <Orion currentPage={currentPage} onNavigate={navigate} />
+
+      <AnimatePresence mode="wait">
+        {currentPage === "hub" ? (
+          <motion.div key="hub" {...hubTransition} className="fixed inset-0 pt-16">
+            <NeuralHub onNavigate={navigate} />
+          </motion.div>
+        ) : (
+          <motion.div key={currentPage} {...pageTransition} className="relative z-10">
+            {renderPage()}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
