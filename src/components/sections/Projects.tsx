@@ -31,6 +31,18 @@ const projects = [
     status: "En cours",
   },
   {
+    title: "ProofPay",
+    subtitle: "Preuve de paiement securisee",
+    description:
+      "Application fintech permettant de generer et verifier des preuves de paiement. Interface moderne, gestion securisee des transactions et architecture full-stack robuste.",
+    tags: ["Next.js", "React", "Tailwind CSS", "Node.js", "Database"],
+    link: "https://proof-pay-rho.vercel.app/",
+    github: null,
+    color: "#10b981",
+    gradient: "from-[#10b981] to-[#00e5ff]",
+    status: "En ligne",
+  },
+  {
     title: "Djazz Junior BTP",
     subtitle: "Site officiel entreprise BTP",
     description:
