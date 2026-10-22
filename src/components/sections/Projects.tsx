@@ -43,6 +43,18 @@ const projects = [
     status: "En ligne",
   },
   {
+    title: "Kassa",
+    subtitle: "Gestion de stock multi-boutiques",
+    description:
+      "Plateforme de gestion de stock multi-boutiques permettant le suivi centralise des inventaires, la gestion des produits et le controle des mouvements de stock en temps reel.",
+    tags: ["Spring Boot", "Java", "Thymeleaf", "MySQL", "REST API"],
+    link: "https://kassa-gamma.vercel.app/",
+    github: null,
+    color: "#f59e0b",
+    gradient: "from-[#f59e0b] to-[#e040fb]",
+    status: "En ligne",
+  },
+  {
     title: "Djazz Junior BTP",
     subtitle: "Site officiel entreprise BTP",
     description:
