@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { HiLocationMarker, HiMail } from "react-icons/hi";
+import Image from "next/image";
 
 export default function AccueilPage() {
   return (
@@ -143,12 +144,17 @@ export default function AccueilPage() {
               transition={{ delay: 0.5 }}
               className="hidden lg:flex flex-col items-center gap-6"
             >
-              {/* Photo placeholder */}
+              {/* Photo */}
               <div className="relative">
-                <div className="w-56 h-64 rounded-2xl bg-gradient-to-b from-white/[0.04] to-white/[0.01] border border-white/[0.08] flex items-center justify-center overflow-hidden">
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[var(--gradient-1)]/20 to-[var(--gradient-2)]/20 flex items-center justify-center">
-                    <span className="text-4xl font-bold gradient-text-static">SD</span>
-                  </div>
+                <div className="w-56 h-72 rounded-2xl bg-gradient-to-b from-white/[0.04] to-white/[0.01] border border-white/[0.08] overflow-hidden">
+                  <Image
+                    src="/images/safwan.png"
+                    alt="Safwan Djazouli"
+                    width={224}
+                    height={288}
+                    className="w-full h-full object-cover object-top"
+                    priority
+                  />
                 </div>
                 <div className="absolute -top-2 -right-2 px-3 py-1 rounded-full bg-[var(--accent)] text-white text-[10px] font-bold uppercase tracking-wider">
                   Licence 3 · 2026-27
